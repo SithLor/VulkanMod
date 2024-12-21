@@ -1,10 +1,13 @@
 package net.vulkanmod.config;
 
+import net.vulkanmod.Helper;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.glfw.GLFW;
 
 import static net.vulkanmod.Initializer.LOGGER;
 import static org.lwjgl.glfw.GLFW.*;
+
+
 
 public abstract class Platform {
     private static final int activePlat = getSupportedPlat();
@@ -30,14 +33,30 @@ public abstract class Platform {
         };
     }
 
-    private static int getSupportedPlat() {
-        //Switch statement would be ideal, but couldn't find a good way of implementing it, so fell back to basic if statements/branches
-        if (SystemUtils.IS_OS_WINDOWS) return GLFW_PLATFORM_WIN32;
-        if (SystemUtils.IS_OS_MAC_OSX) return GLFW_PLATFORM_COCOA;
-        if (SystemUtils.IS_OS_LINUX) return determineDisplayServer(); //Linux Or Android
 
-        return GLFW_ANY_PLATFORM; //Unknown platform
+
+
+    private static int getSupportedPlat() {
+        //from GLFW.java
+        // public static final int
+        //         GLFW_ANY_PLATFORM     = 0x60000,
+        //         GLFW_PLATFORM_WIN32   = 0x60001,
+        //         GLFW_PLATFORM_COCOA   = 0x60002,
+        //         GLFW_PLATFORM_WAYLAND = 0x60003,
+        //         GLFW_PLATFORM_X11     = 0x60004,
+        //         GLFW_PLATFORM_NULL    = 0x60005;
+
+         //Switch statement would be ideal, but couldn't find a good way of implementing it, so fell back to basic if statements/branches
+         if (SystemUtils.IS_OS_WINDOWS) return 0x6_0001;
+         if (SystemUtils.IS_OS_MAC_OSX) return 0x6_0002;
+         if (SystemUtils.IS_OS_LINUX) return determineDisplayServer(); //Linux Or Android
+
+         return 0x60000; //Unknown platform
     }
+
+
+
+ 
 
     private static String getStringFromPlat(int plat) {
         return switch (plat) {
